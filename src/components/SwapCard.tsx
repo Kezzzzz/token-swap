@@ -121,16 +121,16 @@ export default function SwapCard() {
           </div>
         </div>
 
-        {/* Swap Button */}
+        {/* Swap Button - Minimal */}
         <div className="relative my-2 flex justify-center">
           <button
             onClick={handleSwap}
             disabled={!sourceToken || !targetToken}
-            className="group relative z-10 rounded-lg border border-gray-700/50 bg-[#1a1a20] p-2 transition-all duration-200 hover:enabled:bg-gray-700/50 hover:enabled:border-purple-500/30 disabled:cursor-not-allowed disabled:opacity-30"
+            className="group relative z-10 p-2 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-30"
             aria-label="Swap tokens"
           >
             <svg
-              className="h-5 w-5 text-gray-400 transition-transform duration-200 group-hover:enabled:rotate-180 group-hover:enabled:text-purple-400"
+              className="h-4 w-4 text-gray-600 transition-transform duration-200 group-hover:enabled:rotate-180 group-hover:enabled:text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

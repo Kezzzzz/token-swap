@@ -48,11 +48,6 @@ export default function TokenListItem({
           <span className="font-semibold text-white text-sm">
             {token.symbol}
           </span>
-          {token.featured && (
-            <span className="rounded-full bg-linear-to-r from-purple-600 to-blue-600 px-2 py-0.5 text-[10px] font-semibold text-white leading-none">
-              Popular
-            </span>
-          )}
           <span className="rounded-full bg-gray-800 px-2 py-0.5 text-[10px] font-medium text-gray-400 leading-none">
             {CHAIN_NAMES[token.chainId]}
           </span>
