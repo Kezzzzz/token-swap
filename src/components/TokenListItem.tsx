@@ -34,10 +34,10 @@ export default function TokenListItem({
       onMouseEnter={onMouseEnter}
       className={`group flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${
         isSelected
-          ? "bg-purple-900/30 border-l-2 border-purple-500"
+          ? "bg-white/10 border-l-2 border-white"
           : isHighlighted
-          ? "bg-purple-800/30 border-l-2 border-purple-400"
-          : "hover:bg-gray-800/50"
+          ? "bg-white/5 border-l-2 border-white/50"
+          : "hover:bg-white/5"
       }`}
     >
       {/* Token Icon */}
@@ -71,7 +71,7 @@ export default function TokenListItem({
         {/* Selected Checkmark */}
         {isSelected && (
           <svg
-            className="h-5 w-5 text-purple-400"
+            className="h-5 w-5 text-white"
             fill="currentColor"
             viewBox="0 0 20 20"
           >

@@ -48,7 +48,7 @@ export default function TokenAvatar({ symbol, size = "md", className = "" }: Tok
     // Fallback to letter avatar
     return (
       <div
-        className={`flex ${sizeClasses[size]} shrink-0 items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-blue-600 text-white font-bold shadow-sm shadow-purple-500/20 ${className}`}
+        className={`flex ${sizeClasses[size]} shrink-0 items-center justify-center rounded-full bg-white/10 text-white font-bold border border-white/20 ${className}`}
       >
         {symbol.slice(0, 2)}
       </div>
@@ -58,7 +58,7 @@ export default function TokenAvatar({ symbol, size = "md", className = "" }: Tok
   return (
     <div className={`relative ${sizeClasses[size]} shrink-0 ${className}`}>
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-sm shadow-purple-500/20">
+        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-white/10 text-white font-bold text-xs border border-white/20">
           {symbol.slice(0, 2)}
         </div>
       )}

@@ -76,16 +76,16 @@ export default function SwapCard() {
         <div
           className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-0"
           style={{
-            background: `radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), rgba(139, 92, 246, 0.8), transparent 80%)`,
+            background: `radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.2), transparent 80%)`,
           }}
         />
 
         {/* Static border fallback */}
-        <div className="absolute inset-0 rounded-3xl bg-gray-800/50 z-0" />
+        <div className="absolute inset-0 rounded-3xl bg-white/5 z-0" />
 
           {/* Content container - Single merged container */}
-          <div className="relative z-10 rounded-3xl bg-linear-to-br from-[#141418] to-[#1a1a1f] p-4 shadow-2xl shadow-purple-900/10 backdrop-blur-xl">
-            <div className="rounded-2xl border border-gray-800/30 bg-[#0f0f14] p-4">
+          <div className="relative z-10 rounded-3xl bg-[#0a0a0a] p-4 shadow-2xl shadow-black/50 backdrop-blur-xl">
+            <div className="rounded-2xl border border-white/10 bg-black p-4">
               {/* Source Section - You Pay */}
               <div className="space-y-2">
                 <label className="px-2 text-xs font-medium uppercase tracking-wider text-gray-400">
@@ -104,12 +104,12 @@ export default function SwapCard() {
                 {sourceToken ? (
                   <>
                     {/* Input Field with Visual Clarity */}
-                    <div className="relative mb-3 rounded-xl border-2 border-gray-700/50 bg-[#1a1a20] p-4 transition-all focus-within:border-purple-500 focus-within:ring-2 focus-within:ring-purple-500/20">
-                      <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-gray-500">
+                    <div className="relative mb-3 rounded-xl border-2 border-white/10 bg-white/5 p-4 transition-all focus-within:border-white/30 focus-within:ring-2 focus-within:ring-white/10">
+                      <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-gray-600">
                         Amount
                       </label>
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl font-semibold text-purple-400">
+                        <span className="text-2xl font-semibold text-gray-400">
                           $
                         </span>
                         <input
@@ -168,13 +168,13 @@ export default function SwapCard() {
               {/* Divider with Swap Button */}
               <div className="relative my-4 flex items-center justify-center">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-800/50"></div>
+                  <div className="w-full border-t border-white/10"></div>
                 </div>
                 <div className="relative">
                   <motion.button
                     onClick={handleSwap}
                     disabled={!sourceToken || !targetToken}
-                    className="rounded-full border border-gray-800/50 bg-[#0f0f14] p-2 transition-colors duration-200 hover:enabled:bg-[#1a1a20] hover:enabled:border-purple-500/30 disabled:cursor-not-allowed disabled:bg-[#0f0f14]"
+                    className="rounded-full border border-white/10 bg-[#0a0a0a] p-2 transition-colors duration-200 hover:enabled:bg-[#1a1a1a] hover:enabled:border-white/20 disabled:cursor-not-allowed disabled:bg-[#0a0a0a]"
                     aria-label="Swap tokens"
                     whileTap={sourceToken && targetToken ? { scale: 0.9 } : {}}
                     animate={{ rotate: swapKey * 180 }}
