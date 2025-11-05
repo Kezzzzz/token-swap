@@ -128,8 +128,8 @@ export default function SwapCard() {
                     {/* Token Amount Display */}
                     {sourceLoading ? (
                       <div className="space-y-2">
-                        <div className="h-4 w-32 animate-pulse rounded bg-gray-700"></div>
-                        <div className="h-3 w-24 animate-pulse rounded bg-gray-700/50"></div>
+                        <div className="h-5 w-32 animate-pulse rounded bg-gray-700"></div>
+                        <div className="h-4 w-24 animate-pulse rounded bg-gray-700/50"></div>
                       </div>
                     ) : sourcePrice ? (
                       <AnimatePresence mode="wait">
@@ -216,9 +216,9 @@ export default function SwapCard() {
                   <>
                     {targetLoading ? (
                       <div className="space-y-2">
-                        <div className="h-12 w-3/4 animate-pulse rounded bg-gray-700"></div>
-                        <div className="h-4 w-32 animate-pulse rounded bg-gray-700/50"></div>
-                        <div className="h-3 w-24 animate-pulse rounded bg-gray-700/50"></div>
+                        <div className="h-[44px] w-3/4 animate-pulse rounded bg-gray-700 mb-2"></div>
+                        <div className="h-5 w-32 animate-pulse rounded bg-gray-700/50"></div>
+                        <div className="h-4 w-24 animate-pulse rounded bg-gray-700/50"></div>
                       </div>
                     ) : (
                       <AnimatePresence mode="wait">
