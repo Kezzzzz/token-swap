@@ -2,6 +2,7 @@
 
 import { Token, CHAIN_NAMES } from "@/lib/constants/tokens";
 import { useSparklineData } from "@/hooks/useSparklineData";
+import TokenAvatar from "./TokenAvatar";
 
 interface TokenListItemProps {
   token: Token;
@@ -39,9 +40,7 @@ export default function TokenListItem({
       }`}
     >
       {/* Token Icon */}
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-sm shadow-purple-500/20">
-        {token.symbol.slice(0, 2)}
-      </div>
+      <TokenAvatar symbol={token.symbol} size="sm" />
 
       {/* Token Info */}
       <div className="flex-1 min-w-0">

@@ -5,6 +5,7 @@ import { SUPPORTED_TOKENS, Token, CHAIN_NAMES } from "@/lib/constants/tokens";
 import { useSparklineData } from "@/hooks/useSparklineData";
 import TokenListItem from "./TokenListItem";
 import Sparkline from "./Sparkline";
+import TokenAvatar from "./TokenAvatar";
 
 interface TokenDropdownProps {
   selectedToken: Token | null;
@@ -186,9 +187,7 @@ export default function TokenDropdown({
           <div className="flex items-center justify-between gap-3">
             {selectedToken ? (
               <div className="flex flex-1 items-center gap-2.5 min-w-0">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-md shadow-purple-500/20">
-                  {selectedToken.symbol.slice(0, 2)}
-                </div>
+                <TokenAvatar symbol={selectedToken.symbol} size="sm" />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold text-white leading-tight">
                     {selectedToken.symbol}
