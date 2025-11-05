@@ -1,10 +1,13 @@
-import { getAssetErc20ByChainAndSymbol, getAssetPriceInfo } from "@funkit/api-base";
+import {
+  getAssetErc20ByChainAndSymbol,
+  getAssetPriceInfo,
+} from "@funkit/api-base";
 import { NextRequest, NextResponse } from "next/server";
 
-const FUNKIT_API_KEY = 
-  process.env.FUNKIT_API_KEY || 
-  process.env.NEXT_PUBLIC_FUNKIT_API_KEY || 
-  "Z9SZaOwpmE40KX61mUKWm5hrpGh7WHVkaTvQJpQk";
+const FUNKIT_API_KEY =
+  process.env.FUNKIT_API_KEY ||
+  process.env.NEXT_PUBLIC_FUNKIT_API_KEY ||
+  "SOME_RANDOM_API_KEY";
 
 export async function GET(
   request: NextRequest,
@@ -58,4 +61,3 @@ export async function GET(
     );
   }
 }
-

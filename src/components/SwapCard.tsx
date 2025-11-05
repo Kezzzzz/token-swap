@@ -48,7 +48,7 @@ export default function SwapCard() {
   return (
     <div className="mx-auto w-full max-w-lg space-y-4">
       {/* Swap Card */}
-      <div className="rounded-3xl border border-gray-800/50 bg-gradient-to-br from-[#141418] to-[#1a1a1f] p-4 shadow-2xl shadow-purple-900/10 backdrop-blur-xl">
+      <div className="rounded-3xl border border-gray-800/50 bg-linear-to-br from-[#141418] to-[#1a1a1f] p-4 shadow-2xl shadow-purple-900/10 backdrop-blur-xl">
         {/* Source Section - You Pay */}
         <div className="space-y-2">
           <label className="px-2 text-xs font-medium uppercase tracking-wider text-gray-400">

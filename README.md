@@ -126,7 +126,7 @@ token-swap/
 
 ### ⚡ Performance & UX
 
-- Skeleton loading states (no jarring flashes)
+- Skeleton loading states
 - Optimistic UI updates
 - Smart caching with TanStack Query
 - Error handling with clear feedback

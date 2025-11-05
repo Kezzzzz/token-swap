@@ -2,7 +2,6 @@
 
 import { Token, CHAIN_NAMES } from "@/lib/constants/tokens";
 import { useSparklineData } from "@/hooks/useSparklineData";
-import Sparkline from "./Sparkline";
 
 interface TokenListItemProps {
   token: Token;
@@ -40,18 +39,18 @@ export default function TokenListItem({
       }`}
     >
       {/* Token Icon */}
-      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-sm shadow-purple-500/20">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-sm shadow-purple-500/20">
         {token.symbol.slice(0, 2)}
       </div>
 
-        {/* Token Info */}
+      {/* Token Info */}
       <div className="flex-1 min-w-0">
         <div className="mb-0.5 flex items-center gap-1.5">
           <span className="font-semibold text-white text-sm">
             {token.symbol}
           </span>
           {token.featured && (
-            <span className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 px-2 py-0.5 text-[10px] font-semibold text-white leading-none">
+            <span className="rounded-full bg-linear-to-r from-purple-600 to-blue-600 px-2 py-0.5 text-[10px] font-semibold text-white leading-none">
               Popular
             </span>
           )}
@@ -65,7 +64,7 @@ export default function TokenListItem({
       </div>
 
       {/* Price Change % Only (No Sparkline to reduce API calls) */}
-      <div className="flex flex-shrink-0 items-center gap-3">
+      <div className="flex shrink-0 items-center gap-3">
         {sparklineData && (
           <div className="text-right min-w-[50px]">
             <div
@@ -98,4 +97,3 @@ export default function TokenListItem({
     </button>
   );
 }
-

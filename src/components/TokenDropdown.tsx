@@ -186,7 +186,7 @@ export default function TokenDropdown({
           <div className="flex items-center justify-between gap-3">
             {selectedToken ? (
               <div className="flex flex-1 items-center gap-2.5 min-w-0">
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-md shadow-purple-500/20">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-purple-500 to-blue-600 text-white font-bold text-xs shadow-md shadow-purple-500/20">
                   {selectedToken.symbol.slice(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -209,7 +209,7 @@ export default function TokenDropdown({
               selectedSparkline &&
               selectedSparkline.prices &&
               selectedSparkline.prices.length > 1 && (
-                <div className="flex flex-shrink-0 items-center gap-2">
+                <div className="flex shrink-0 items-center gap-2">
                   <Sparkline
                     data={selectedSparkline.prices}
                     width={60}
@@ -231,7 +231,7 @@ export default function TokenDropdown({
 
             {/* Chevron Icon */}
             <svg
-              className={`h-5 w-5 flex-shrink-0 text-gray-500 transition-transform duration-200 ${
+              className={`h-5 w-5 shrink-0 text-gray-500 transition-transform duration-200 ${
                 isOpen ? "rotate-180" : ""
               }`}
               fill="none"
