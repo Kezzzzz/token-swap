@@ -2,6 +2,8 @@
 
 A modern, intuitive interface for exploring cryptocurrency token prices and comparing values. Built with Next.js, TypeScript, Tailwind CSS, and TanStack Query.
 
+🚀 **Live Demo:** [https://token-swap-c9ped676v-team-kezizzle.vercel.app](https://token-swap-c9ped676v-team-kezizzle.vercel.app)
+
 ## Tech Stack
 
 - **[Next.js 16](https://nextjs.org/)** - React framework with App Router
@@ -146,6 +148,161 @@ function MyComponent() {
 - TypeScript type safety
 - Caching and stale-time management via TanStack Query
 
+## Product & UX Decisions
+
+This section documents the key product and UX decisions made during development, inspired by industry-leading crypto platforms.
+
+### Why Vertical Layout?
+
+**Decision:** Single-column vertical card layout (similar to Uniswap, Matcha, 1inch)
+
+**Reasoning:**
+- **Mobile-first approach** - Works perfectly on all screen sizes without complex responsive logic
+- **Natural reading flow** - Top-to-bottom matches user mental model (input → action → output)
+- **No alignment issues** - Everything stacks naturally without side-by-side complexity
+- **Proven pattern** - Users are already familiar with this from every major DEX
+
+**Alternatives Considered:**
+- Side-by-side panels: Created alignment issues, complex on mobile
+- Multi-step wizard: Too many clicks, poor for quick comparisons
+
+### Why Searchable Dropdowns?
+
+**Decision:** Searchable dropdown selectors instead of button grids
+
+**Reasoning:**
+- **Scalability** - Supports 40+ tokens without UI clutter
+- **Speed** - Users can type to filter instead of scanning 40 buttons
+- **Keyboard-first** - Full arrow key navigation + Enter to select (power user friendly)
+- **Industry standard** - Matches Coinbase, Uniswap, Binance patterns
+
+**UX Enhancements Added:**
+- Auto-focus on search input when dropdown opens
+- Smart positioning (opens upward if no space below)
+- "Popular" badges for most-used tokens
+- Mouse + keyboard hybrid navigation
+
+### Why Sparklines in Selected Token View?
+
+**Decision:** Show sparkline in the dropdown trigger (selected token), not in the dropdown list
+
+**Reasoning:**
+- **API efficiency** - Only 2 API calls max instead of 40+ (respects rate limits)
+- **Progressive disclosure** - Show rich data where it matters (selected tokens)
+- **Performance** - Dropdowns open instantly, no waiting for charts
+- **Visual hierarchy** - Sparkline tightly coupled with your chosen token
+
+**Pattern Inspiration:**
+- Robinhood: List shows %, detail view shows full chart
+- Coinbase: Summary in lists, details on asset pages
+
+### Why Auto-Focus on Amount Input?
+
+**Decision:** After selecting "You pay" token, cursor jumps to amount input and selects the value
+
+**Reasoning:**
+- **Reduces friction** - One less click in the workflow
+- **Matches user intent** - After picking a token, next step is always entering amount
+- **Proven pattern** - Coinbase, Robinhood do this in their flows
+- **Efficiency** - Text is pre-selected for easy replacement
+
+### Why Space Grotesk Font?
+
+**Decision:** Use Space Grotesk instead of default system fonts
+
+**Reasoning:**
+- **Crypto identity** - Used by many DeFi protocols and Web3 apps
+- **Modern aesthetic** - Geometric, technical feel matches the domain
+- **Readability** - Excellent for numbers and data-heavy interfaces
+- **Brand consistency** - Creates a cohesive, professional impression
+
+### Why Dark Theme?
+
+**Decision:** Dark mode by default with purple/blue accents
+
+**Reasoning:**
+- **Crypto industry standard** - Most exchanges use dark themes (reduces eye strain during long sessions)
+- **Premium feel** - Dark backgrounds with colored accents feel more sophisticated
+- **Data focus** - Dark backgrounds make colorful data (green/red changes) pop
+- **User preference** - Crypto traders overwhelmingly prefer dark mode
+
+## Technical Trade-offs
+
+### CoinGecko API for Historical Data
+
+**Decision:** Use CoinGecko's free API for 7-day sparklines
+
+**Why:**
+- Free tier includes historical price data
+- 50 calls/minute is sufficient for our use case
+- Widely used and reliable
+- No additional authentication needed
+
+**Trade-offs:**
+- External dependency (but well-maintained)
+- Rate limits (mitigated with 1-hour caching)
+- Limited to what CoinGecko supports
+
+**Alternative Considered:**
+- Building our own: Would require database, cron jobs, complexity far exceeds scope
+- Paid APIs: Unnecessary for this use case
+
+### Custom SVG Sparklines
+
+**Decision:** Build custom SVG sparkline component instead of using a charting library
+
+**Why:**
+- **Bundle size** - ~2KB vs 100KB+ for Chart.js or Recharts
+- **Performance** - No heavy rendering libraries
+- **Full control** - Exact styling we want (fade effects, colors)
+- **Simplicity** - We only need simple line charts
+
+**Trade-offs:**
+- Less features (no tooltips, zoom, etc.)
+- Manual SVG manipulation required
+- But: Perfect for our minimal needs
+
+### Server-Side API Routes
+
+**Decision:** Proxy all Funkit API calls through Next.js API routes
+
+**Why:**
+- **CORS solution** - Funkit API doesn't allow direct browser calls
+- **Security** - API keys stay server-side, never exposed to browser
+- **Flexibility** - Can add rate limiting, caching, logging
+- **Production-ready** - Proper architecture for deployment
+
+**Trade-offs:**
+- Slightly higher latency (~50-100ms) vs direct calls
+- More code to maintain
+- But: Necessary for security and CORS compliance
+
+### TanStack Query Caching Strategy
+
+**Decision:** Different stale times for different data types
+
+**Implementation:**
+- Token prices: 30s stale, 60s refetch (prices change frequently)
+- Sparklines: 1hr stale (historical data rarely changes)
+
+**Why:**
+- Balances freshness with API efficiency
+- Reduces unnecessary network calls
+- Improves perceived performance
+
+### Featured vs All Tokens
+
+**Decision:** 4 featured tokens with "Popular" badge, then 36+ additional tokens
+
+**Why:**
+- **Discoverability** - Most users will use USDC, USDT, ETH, WBTC
+- **Scalability** - Can support hundreds of tokens without overwhelming new users
+- **Visual clarity** - Badges help users quickly find what they need
+
+**Sort Strategy:**
+- Featured tokens always float to top of search results
+- Provides best of both: curation + comprehensive options
+
 ## Available Scripts
 
 - `npm run dev` - Start the development server
@@ -164,16 +321,35 @@ To learn more about the technologies used in this project:
 
 ## Deployment
 
-### Deploy on Vercel
+This application is deployed on Vercel: [https://token-swap-c9ped676v-team-kezizzle.vercel.app](https://token-swap-c9ped676v-team-kezizzle.vercel.app)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new):
+### Deploy Your Own
 
-1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
-2. Import your repository to Vercel
-3. Vercel will automatically detect Next.js and configure the build settings
-4. Click "Deploy"
+1. **Fork this repository** on GitHub
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Import to Vercel:**
+   - Visit [vercel.com/new](https://vercel.com/new)
+   - Import your forked repository
+   - Vercel will auto-detect Next.js settings
+
+3. **Add Environment Variable:**
+   - Go to Project Settings → Environment Variables
+   - Add: `FUNKIT_API_KEY` with your Funkit API key
+   - Apply to: Production, Preview, Development
+
+4. **Deploy:**
+   - Click "Deploy"
+   - Your app will be live in ~2 minutes!
+
+### Using Vercel CLI
+
+```bash
+npm install -g vercel
+vercel
+# Follow prompts to deploy
+```
+
+For more details, check the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
 
 ## Contributing
 
