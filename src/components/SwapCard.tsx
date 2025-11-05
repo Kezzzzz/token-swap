@@ -35,8 +35,10 @@ export default function SwapCard() {
   });
 
   const usdValue = parseFloat(usdAmount) || 0;
-  const sourceTokenAmount = sourcePrice?.price && usdValue > 0 ? usdValue / sourcePrice.price : 0;
-  const targetTokenAmount = targetPrice?.price && usdValue > 0 ? usdValue / targetPrice.price : 0;
+  const sourceTokenAmount =
+    sourcePrice?.price && usdValue > 0 ? usdValue / sourcePrice.price : 0;
+  const targetTokenAmount =
+    targetPrice?.price && usdValue > 0 ? usdValue / targetPrice.price : 0;
 
   const handleSwap = () => {
     setSourceToken(targetToken);
@@ -96,7 +98,8 @@ export default function SwapCard() {
                 ) : sourcePrice ? (
                   <>
                     <div className="text-sm font-medium text-gray-300">
-                      ≈ {sourceTokenAmount.toLocaleString(undefined, {
+                      ≈{" "}
+                      {sourceTokenAmount.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 8,
                       })}{" "}
@@ -197,31 +200,6 @@ export default function SwapCard() {
           </div>
         </div>
       </div>
-
-      {/* Info Banner */}
-      <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-900/20 to-blue-900/20 p-4 backdrop-blur-sm">
-        <div className="flex items-start gap-3">
-          <svg
-            className="mt-0.5 h-5 w-5 flex-shrink-0 text-purple-400"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <div className="text-sm text-gray-300">
-            <p className="font-semibold text-white">Real-time pricing</p>
-            <p className="mt-1 text-gray-400">
-              Prices update automatically every 60 seconds. This tool shows estimated
-              values and is not intended for actual trading.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
-
