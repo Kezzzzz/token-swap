@@ -4,6 +4,7 @@ import { useState } from "react";
 
 interface TokenAvatarProps {
   symbol: string;
+  chainId?: number;
   size?: "sm" | "md";
   className?: string;
 }
@@ -17,7 +18,8 @@ export default function TokenAvatar({ symbol, size = "md", className = "" }: Tok
     md: "h-10 w-10 text-sm",
   };
 
-  const iconUrl = `https://cryptoicons.org/api/icon/${symbol.toLowerCase()}/200`;
+  // Use cryptocurrency-icons from jsdelivr CDN (free, reliable, 200+ tokens)
+  const iconUrl = `https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/${symbol.toLowerCase()}.png`;
 
   if (imgError) {
     // Fallback to letter avatar
