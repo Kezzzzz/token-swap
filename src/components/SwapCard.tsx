@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Token, CHAIN_NAMES } from "@/lib/constants/tokens";
+import { Token } from "@/lib/constants/tokens";
 import { useTokenPrice } from "@/hooks/useTokenPrice";
 import TokenDropdown from "./TokenDropdown";
 

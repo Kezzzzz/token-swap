@@ -40,7 +40,7 @@ export async function GET(
       priceChangePercent: parseFloat(priceChangePercent),
       isPositive: priceChange >= 0,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Sparkline API] Error fetching data:", error);
     
     return NextResponse.json(

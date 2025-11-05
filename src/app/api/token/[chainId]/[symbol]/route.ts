@@ -43,8 +43,9 @@ export async function GET(
       priceInfo,
       assetInfo,
     });
-  } catch (error: any) {
-    if (error.status === 403 || error.statusCode === 403) {
+  } catch (error: unknown) {
+    const errorObj = error as { status?: number; statusCode?: number };
+    if (errorObj.status === 403 || errorObj.statusCode === 403) {
       return NextResponse.json(
         { error: "API authentication failed" },
         { status: 403 }
