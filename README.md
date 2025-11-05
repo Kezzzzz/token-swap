@@ -112,45 +112,48 @@ token-swap/
 
 ## Features
 
-### 🎨 Modern, Intuitive UI
+### 🎨 Monochromatic Design
 
-- Clean, minimal design inspired by leading crypto platforms (Coinbase, Uniswap, Matcha)
-- Smooth transitions and hover effects
-- Responsive layout that works beautifully on all devices
-- Dark mode support
+- Pure black background with white/grey elements at various opacities
+- High-contrast interface where color comes from data (token logos, price trends)
+- Two-line header with liquid glass gradient effect
+- Mouse-tracking border glow on card hover
+- Smooth morphing sparklines with Motion animations
+- Unified card design with horizontal divider
 
 ### 💱 Real-Time Price Conversion
 
-- **Searchable dropdowns** for intuitive token selection
-- **40+ tokens** across 5 major chains (Ethereum, Polygon, Base, Arbitrum, Optimism)
-- **Featured section** highlighting the 4 most popular tokens
-- **Mini sparklines** showing 7-day price trends for each token
-- **24h price change %** with color coding (green/red)
-- **Search by symbol, name, or chain** for quick access
-- Enter USD amount and see instant conversions
-- Live price updates every 60 seconds
-- Swap tokens with a single click
+- **Searchable dropdowns** with keyboard navigation (arrows, enter, escape)
+- **44 tokens** across 5 major chains (Ethereum, Polygon, Base, Arbitrum, Optimism)
+- **Smart sorting** - Most popular tokens (USDC, USDT, ETH, WBTC) appear first
+- **Animated sparklines** showing 7-day price trends with smooth morphing
+- **Price change %** with color coding (green for gains, red for losses)
+- **Instant search** by symbol, name, or blockchain network
+- **Auto-focus** - Amount input automatically focused after token selection
+- **Live updates** - Prices refresh every 60 seconds
+- **Swap animation** - Icon rotates 180°, values crossfade smoothly
 
 ### ⚡ Performance & UX
 
-- Skeleton loading states
-- Optimistic UI updates
-- Smart caching with TanStack Query
-- Error handling with clear feedback
-- Focus and hover states for accessibility
+- Pixel-perfect skeleton loaders (no layout shift)
+- TanStack Query caching with smart stale-time management
+- Error handling with clear user feedback
+- Keyboard-first navigation throughout
+- Cross-browser custom scrollbars
+- Accessible focus states and ARIA labels
 
 ### Funkit API Integration
 
 The application integrates with the Funkit API to fetch real-time cryptocurrency prices using Next.js API routes.
 
-**Featured Tokens:**
+**Required Tokens (Assignment Specification):**
 
-- **USDC** on Ethereum (Chain ID: 1)
-- **USDT** on Polygon (Chain ID: 137)
-- **ETH** on Base (Chain ID: 8453)
-- **WBTC** on Ethereum (Chain ID: 1)
+- ✅ **USDC** on Ethereum (Chain ID: 1)
+- ✅ **USDT** on Polygon (Chain ID: 137)
+- ✅ **ETH** on Base (Chain ID: 8453)
+- ✅ **WBTC** on Ethereum (Chain ID: 1)
 
-**All Supported Tokens:**
+**Extended Token Support:**
 
 - **40+ tokens** across major DeFi protocols
 - **5 chains**: Ethereum, Polygon, Base, Arbitrum, Optimism
@@ -266,7 +269,7 @@ This section documents the key product and UX decisions made during development,
 
 ### Why Dark Theme?
 
-**Decision:** Dark mode by default with purple/blue accents
+**Decision:** Dark mode by default with monochromatic accents
 
 **Reasoning:**
 
@@ -316,7 +319,7 @@ This section documents the key product and UX decisions made during development,
 
 ### Why Mouse-Tracking Border Glow?
 
-**Decision:** Interactive 2px purple glow that follows cursor around card border
+**Decision:** Interactive 2px glow that follows cursor around card border
 
 **Reasoning:**
 
@@ -334,11 +337,11 @@ This section documents the key product and UX decisions made during development,
 
 ### Why Custom Scrollbars?
 
-**Decision:** Purple-themed minimal scrollbars across all browsers/platforms
+**Decision:** Themed minimal scrollbars across all browsers/platforms
 
 **Reasoning:**
 
-- **Brand consistency** - Matches purple accent color throughout UI
+- **Brand consistency** - Matches color throughout UI
 - **Cross-platform uniformity** - Same experience on Windows/Mac/Linux
 - **Aesthetic** - Default white scrollbars clash with dark theme
 - **Professional touch** - Details matter in high-quality products
@@ -346,7 +349,7 @@ This section documents the key product and UX decisions made during development,
 **Implementation:**
 
 - 8px width (thin, minimal)
-- Purple thumb with opacity transitions
+- Grey/white thumb with opacity transitions
 - Works in Firefox (scrollbar-color) and Webkit (pseudo-elements)
 
 ### Why Token Avatar Fallbacks?
@@ -364,8 +367,84 @@ This section documents the key product and UX decisions made during development,
 
 - **Primary:** CoinGecko asset URLs (reliable for top 100 tokens, globally cached)
 - **Secondary:** CryptoCurrency Icons CDN (covers 200+ tokens)
-- **Fallback:** Purple/blue gradient circles with first 2 letters (matches theme)
+- **Fallback:** Monochrome white/10 background with white/20 border (matches theme)
 - **Smart reset:** Avatar state resets when token changes to prevent stale images
+
+### Why Monochromatic Color Scheme?
+
+**Decision:** Pure black background with white/grey spectrum, color only from data
+
+**Reasoning:**
+
+- **Data-first design** - Token logos and price trends (green/red) become the visual focus
+- **Professional aesthetic** - High-contrast monochrome feels premium and trustworthy
+- **Reduced cognitive load** - No competing visual elements, clearer information hierarchy
+- **Modern trend** - Apple, Linear, and other design-forward companies use monochrome extensively
+
+**Color Usage:**
+
+- **Backgrounds:** Pure black (#000000) with white overlays at 5%, 10%, 20%
+- **Borders:** White at 10-30% opacity for subtle separation
+- **Text:** White for primary, grey-400/500 for secondary
+- **Interactive states:** White opacity increases on hover/focus
+- **Accents:** Only from data - green (gains), red (losses), token brand colors
+
+**Result:** Clean, focused interface where every UI element serves a purpose.
+
+### Why Two-Line Header with Liquid Glass Effect?
+
+**Decision:** Split title into two lines with vertical gradient fade
+
+**Reasoning:**
+
+- **Visual impact** - Larger, more commanding presence
+- **Liquid glass aesthetic** - Text fading to black creates premium, Apple-like feel
+- **Breathing room** - Two lines reduce horizontal width, improve readability
+- **Modern design pattern** - Vertical text gradients popular in high-end interfaces
+
+**Implementation:**
+
+- "Token Price" on line 1, "Explorer" on line 2
+- Gradient: white (0-15%) → transparent/black (100%)
+- Only bottom portions of letters fade
+- Creates depth and visual interest without color
+- Naturally pulls the users eyes downward
+
+### Why Unified Card Design?
+
+**Decision:** Single container with horizontal divider instead of two separate cards
+
+**Reasoning:**
+
+- **Visual simplicity** - One object easier to parse than two floating elements
+- **Clearer hierarchy** - Swap button literally sits between inputs, showing the relationship
+- **Less visual noise** - No duplicate borders, shadows, or backgrounds
+- **Better for swapping** - User sees inputs as connected parts of one action
+
+**Implementation:**
+
+- Single rounded card with one dark background
+- Thin horizontal line as divider
+- Swap button centered on divider line
+- Solid button background hides divider in all states
+
+### Why Crossfade Swap Animations?
+
+**Decision:** Smooth opacity transitions for changing values, icon rotation for swap action
+
+**Reasoning:**
+
+- **Visual continuity** - Values fading in/out feels natural vs instant flash
+- **Confirmation feedback** - Icon rotation clearly indicates swap happened
+- **Subtle, not distracting** - 0.2s crossfade + 0.3s rotation = just enough feedback
+- **Professional polish** - Smooth transitions signal quality and attention to detail
+
+**Implementation:**
+
+- Token amounts and prices: 200ms crossfade using AnimatePresence
+- Swap icon: 180° rotation on each click
+- Sparklines: Smooth path morphing (already animated)
+- No bouncing or sliding - just fade and rotate
 
 ## Technical Trade-offs
 
@@ -401,6 +480,7 @@ This section documents the key product and UX decisions made during development,
 - **Performance** - Lightweight, GPU-accelerated animations
 - **Full control** - Exact styling and animation timing
 - **Simplicity** - We only need simple line charts with morphing
+- **Previous Knowledge** - Previous projects where framer-motion was used for SVG animations, this felt natural to me
 
 **Trade-offs:**
 
@@ -448,20 +528,22 @@ This section documents the key product and UX decisions made during development,
 - Reduces unnecessary network calls
 - Improves perceived performance
 
-### Featured vs All Tokens
+### Why Prioritize Popular Tokens?
 
-**Decision:** 4 featured tokens with "Popular" badge, then 36+ additional tokens
+**Decision:** USDC, USDT, ETH, WBTC automatically appear at the top of token lists
 
-**Why:**
+**Reasoning:**
 
-- **Discoverability** - Most users will use USDC, USDT, ETH, WBTC
-- **Scalability** - Can support hundreds of tokens without overwhelming new users
-- **Visual clarity** - Badges help users quickly find what they need
+- **80/20 rule** - These 4 tokens account for the majority of user swaps
+- **No visual clutter** - Sorting handles discoverability without badges or decorative elements
+- **Scalability** - Can add hundreds more tokens without UI complexity
+- **Speed to value** - Users find common tokens instantly without scrolling
 
-**Sort Strategy:**
+**Implementation:**
 
-- Featured tokens always float to top of search results
-- Provides best of both: curation + comprehensive options
+- Featured tokens sorted to top of all lists and search results
+- No special visual treatment - clean, minimal appearance
+- Same search functionality across all 44 tokens
 
 ## Available Scripts
 
