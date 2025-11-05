@@ -34,8 +34,9 @@ Lighthouse scores for the production deployment:
 
 - **[Next.js 16](https://nextjs.org/)** - React framework with App Router
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[TanStack Query](https://tanstack.com/query)** - Powerful data fetching and state management
+- **[Tailwind CSS v4](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[TanStack Query v5](https://tanstack.com/query)** - Powerful data fetching and state management
+- **[Motion](https://motion.dev/)** - Lightweight animation library (formerly Framer Motion)
 - **[@funkit/api-base](https://www.npmjs.com/package/@funkit/api-base)** - Real-time token prices
 - **[CoinGecko API](https://www.coingecko.com/api)** - Historical price data & sparklines
 
@@ -53,6 +54,12 @@ Before you begin, ensure you have the following installed:
 ```bash
 npm install
 ```
+
+**Key Dependencies:**
+
+- `motion` - For smooth sparkline animations (path morphing, color transitions)
+- `@tanstack/react-query` - Data fetching and caching
+- `@funkit/api-base` - Crypto token price API
 
 ### 2. Configure Funkit API Key (Optional)
 
@@ -268,6 +275,98 @@ This section documents the key product and UX decisions made during development,
 - **Data focus** - Dark backgrounds make colorful data (green/red changes) pop
 - **User preference** - Crypto traders overwhelmingly prefer dark mode
 
+### Why Minimalist Design Approach?
+
+**Decision:** Tight spacing, clean typography, no decorative elements
+
+**Reasoning:**
+
+- **Information density** - Compact dropdowns show more tokens without scrolling
+- **Professional aesthetic** - Clean, uncluttered interfaces feel more trustworthy
+- **Speed to information** - Users can scan tokens faster without visual noise
+- **Modern trend** - Leading fintech apps (Stripe, Coinbase, Wise) embrace minimalism
+
+**Design Principles Applied:**
+
+- Single headline, no subtitle (self-explanatory interface)
+- Token sorting instead of badges (popular tokens appear first naturally)
+- Tight 12px padding in dropdowns (maximizes visible options)
+- Implied labels (sparkline implies "7-day trend")
+- Medium font weights (reduces visual heaviness)
+
+### Why Animated Sparklines?
+
+**Decision:** Use Motion library for smooth sparkline morphing instead of instant updates
+
+**Reasoning:**
+
+- **Visual continuity** - Morphing paths feel natural, flashing is jarring
+- **Professional polish** - Animations signal quality and attention to detail
+- **Data storytelling** - Transitions help users track how trends change
+- **Modern expectation** - Users expect smooth UI in 2024
+
+**Implementation:**
+
+- 0.8s path morphing with cubic-bezier easing
+- Color transitions (green ↔ red) over 0.5s
+- No fade in/out - pure shape transformation
+- Lightweight (~10KB) vs heavy charting libraries (100KB+)
+
+**Trade-off:** Slight complexity vs instant updates, but worth it for polish
+
+### Why Mouse-Tracking Border Glow?
+
+**Decision:** Interactive 2px purple glow that follows cursor around card border
+
+**Reasoning:**
+
+- **Premium feel** - Interactive micro-animations signal high-quality product
+- **Visual feedback** - Subtle acknowledgment of user presence
+- **Modern pattern** - Popular in Web3/crypto interfaces (e.g., Rainbow, Phantom)
+- **Non-intrusive** - Only visible on hover, doesn't distract
+
+**Implementation:**
+
+- Radial gradient (300px radius) at cursor position
+- 2px border wrapper with CSS custom properties
+- Smooth 500ms fade-in on hover
+- Zero performance impact (CSS-only)
+
+### Why Custom Scrollbars?
+
+**Decision:** Purple-themed minimal scrollbars across all browsers/platforms
+
+**Reasoning:**
+
+- **Brand consistency** - Matches purple accent color throughout UI
+- **Cross-platform uniformity** - Same experience on Windows/Mac/Linux
+- **Aesthetic** - Default white scrollbars clash with dark theme
+- **Professional touch** - Details matter in high-quality products
+
+**Implementation:**
+
+- 8px width (thin, minimal)
+- Purple thumb with opacity transitions
+- Works in Firefox (scrollbar-color) and Webkit (pseudo-elements)
+
+### Why Token Avatar Fallbacks?
+
+**Decision:** Multi-tier image loading with graceful fallback to gradient letter avatars
+
+**Reasoning:**
+
+- **Reliability** - External CDNs can be slow or fail; fallbacks ensure UI never breaks
+- **Performance** - CoinGecko URLs are cached globally for fast loading
+- **Graceful degradation** - Letter avatars look intentional and consistent, not like broken images
+- **User trust** - Visual consistency across all tokens builds confidence
+
+**Implementation:**
+
+- **Primary:** CoinGecko asset URLs (reliable for top 100 tokens, globally cached)
+- **Secondary:** CryptoCurrency Icons CDN (covers 200+ tokens)
+- **Fallback:** Purple/blue gradient circles with first 2 letters (matches theme)
+- **Smart reset:** Avatar state resets when token changes to prevent stale images
+
 ## Technical Trade-offs
 
 ### CoinGecko API for Historical Data
@@ -292,22 +391,30 @@ This section documents the key product and UX decisions made during development,
 - Building our own: Would require database, cron jobs, complexity far exceeds scope
 - Paid APIs: Unnecessary for this use case
 
-### Custom SVG Sparklines
+### Custom SVG Sparklines with Motion
 
-**Decision:** Build custom SVG sparkline component instead of using a charting library
+**Decision:** Build custom SVG sparkline component with Motion animations
 
 **Why:**
 
-- **Bundle size** - ~2KB vs 100KB+ for Chart.js or Recharts
-- **Performance** - No heavy rendering libraries
-- **Full control** - Exact styling we want (fade effects, colors)
-- **Simplicity** - We only need simple line charts
+- **Bundle size** - ~12KB (2KB SVG + 10KB Motion) vs 100KB+ for Chart.js or Recharts
+- **Performance** - Lightweight, GPU-accelerated animations
+- **Full control** - Exact styling and animation timing
+- **Simplicity** - We only need simple line charts with morphing
 
 **Trade-offs:**
 
 - Less features (no tooltips, zoom, etc.)
-- Manual SVG manipulation required
-- But: Perfect for our minimal needs
+- Manual SVG path calculations
+- Additional Motion dependency
+- But: Perfect for our needs with beautiful animations
+
+**Why Motion over CSS Transitions:**
+
+- CSS can't smoothly morph SVG paths (just opacity/transform)
+- Motion handles complex path interpolation automatically
+- Better easing curves and timing control
+- Only 10KB - acceptable for the polish it provides
 
 ### Server-Side API Routes
 
@@ -363,15 +470,6 @@ This section documents the key product and UX decisions made during development,
 - `npm start` - Start the production server
 - `npm run lint` - Run ESLint to check code quality
 
-## Learn More
-
-To learn more about the technologies used in this project:
-
-- [Next.js Documentation](https://nextjs.org/docs) - Learn about Next.js features and API
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/) - Learn TypeScript
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs) - Learn Tailwind CSS
-- [TanStack Query Documentation](https://tanstack.com/query/latest/docs/framework/react/overview) - Learn TanStack Query
-
 ## Deployment
 
 This application is deployed on Vercel: [https://token-swap-c9ped676v-team-kezizzle.vercel.app](https://token-swap-c9ped676v-team-kezizzle.vercel.app)
@@ -405,10 +503,6 @@ vercel
 ```
 
 For more details, check the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
-
-## Contributing
-
-Feel free to contribute to this project by opening issues or submitting pull requests.
 
 ## License
 

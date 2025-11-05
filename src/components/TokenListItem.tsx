@@ -21,6 +21,7 @@ export default function TokenListItem({
   onMouseEnter,
   itemRef,
 }: TokenListItemProps) {
+  // Always fetch sparkline data
   const { data: sparklineData } = useSparklineData({
     symbol: token.symbol,
     chainId: token.chainId,
@@ -31,7 +32,7 @@ export default function TokenListItem({
       ref={itemRef}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      className={`group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors ${
+      className={`group flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${
         isSelected
           ? "bg-purple-900/30 border-l-2 border-purple-500"
           : isHighlighted
@@ -42,34 +43,28 @@ export default function TokenListItem({
       {/* Token Icon */}
       <TokenAvatar symbol={token.symbol} size="sm" />
 
-      {/* Token Info */}
+      {/* Token Info - Minimal */}
       <div className="flex-1 min-w-0">
-        <div className="mb-0.5 flex items-center gap-1.5 flex-wrap">
-          <span className="font-semibold text-white text-sm">
+        <div className="flex items-center gap-1.5">
+          <span className="font-medium text-white text-sm">
             {token.symbol}
           </span>
-          <span className="rounded-full bg-gray-800 px-2 py-0.5 text-[10px] font-medium text-gray-400 leading-none">
+          <span className="text-[10px] text-gray-500">
             {CHAIN_NAMES[token.chainId]}
           </span>
         </div>
-        <div className="text-[11px] text-gray-500 truncate leading-tight">
-          {token.name}
-        </div>
       </div>
 
-      {/* Price Change % Only (No Sparkline to reduce API calls) */}
-      <div className="flex shrink-0 items-center gap-3">
+      {/* Price Change % - Minimal */}
+      <div className="flex shrink-0 items-center gap-2">
         {sparklineData && (
-          <div className="text-right min-w-[50px]">
-            <div
-              className={`text-xs font-semibold ${
-                sparklineData.isPositive ? "text-green-500" : "text-red-500"
-              }`}
-            >
-              {sparklineData.isPositive ? "+" : ""}
-              {sparklineData.priceChangePercent}%
-            </div>
-            <div className="text-xs text-gray-500">7d</div>
+          <div
+            className={`text-xs font-medium ${
+              sparklineData.isPositive ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {sparklineData.isPositive ? "+" : ""}
+            {sparklineData.priceChangePercent}%
           </div>
         )}
 

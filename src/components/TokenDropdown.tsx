@@ -182,18 +182,15 @@ export default function TokenDropdown({
           ref={triggerRef}
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="group relative w-full rounded-xl border border-gray-700/50 bg-[#1a1a20] px-4 py-3.5 text-left transition-all duration-200 hover:border-purple-500/50 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+          className="group relative w-full rounded-xl border border-gray-700/50 bg-[#1a1a20] px-3 py-2.5 text-left transition-all duration-200 hover:border-purple-500/50 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
         >
           <div className="flex items-center justify-between gap-3">
             {selectedToken ? (
               <div className="flex flex-1 items-center gap-2.5 min-w-0">
                 <TokenAvatar symbol={selectedToken.symbol} size="sm" />
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold text-white leading-tight">
+                  <div className="text-sm font-medium text-white">
                     {selectedToken.symbol}
-                  </div>
-                  <div className="text-[11px] text-gray-500 truncate leading-tight mt-0.5">
-                    {selectedToken.name} • {CHAIN_NAMES[selectedToken.chainId]}
                   </div>
                 </div>
               </div>
@@ -255,7 +252,7 @@ export default function TokenDropdown({
             }`}
           >
             {/* Search Input */}
-            <div className="border-b border-gray-700/50 p-3">
+            <div className="border-b border-gray-700/50 p-2.5">
               <div className="relative">
                 <svg
                   className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
@@ -283,7 +280,7 @@ export default function TokenDropdown({
             </div>
 
             {/* Token List */}
-            <div className="max-h-80 overflow-y-auto">
+            <div className="max-h-72 overflow-y-auto">
               {filteredTokens.length > 0 ? (
                 filteredTokens.map((token, index) => {
                   const isSelected =
@@ -306,7 +303,7 @@ export default function TokenDropdown({
                   );
                 })
               ) : (
-                <div className="px-4 py-8 text-center text-sm text-gray-500">
+                <div className="px-3 py-6 text-center text-sm text-gray-500">
                   No tokens found
                 </div>
               )}

@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "motion/react";
+
 interface SparklineProps {
   data: number[];
   width?: number;
@@ -55,6 +59,13 @@ export default function Sparkline({
     .join(" ");
 
   const uniqueId = `sparkline-${Math.random().toString(36).substr(2, 9)}`;
+  
+  // Path for area fill
+  const areaPath = `M 0,${height} L ${points} L ${width},${height} Z`;
+  
+  // Color values
+  const strokeColor = isPositive ? "#10b981" : "#ef4444";
+  const gradientColor = isPositive ? "#10b981" : "#ef4444";
 
   return (
     <svg 
@@ -66,25 +77,47 @@ export default function Sparkline({
       <defs>
         {/* Simple vertical gradient for fill */}
         <linearGradient id={`gradient-${uniqueId}`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={isPositive ? "#10b981" : "#ef4444"} stopOpacity="0.3" />
-          <stop offset="100%" stopColor={isPositive ? "#10b981" : "#ef4444"} stopOpacity="0" />
+          <motion.stop 
+            offset="0%" 
+            stopOpacity="0.3"
+            animate={{ stopColor: gradientColor }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          />
+          <motion.stop 
+            offset="100%" 
+            stopOpacity="0"
+            animate={{ stopColor: gradientColor }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          />
         </linearGradient>
       </defs>
 
       {/* Area under the line (subtle fill) */}
-      <path
-        d={`M 0,${height} L ${points} L ${width},${height} Z`}
+      <motion.path
+        d={areaPath}
         fill={`url(#gradient-${uniqueId})`}
+        animate={{ d: areaPath }}
+        transition={{
+          duration: 0.8,
+          ease: [0.4, 0, 0.2, 1],
+        }}
       />
 
       {/* The line itself */}
-      <polyline
+      <motion.polyline
         points={points}
         fill="none"
-        className={isPositive ? "stroke-green-500" : "stroke-red-500"}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        animate={{ 
+          points: points,
+          stroke: strokeColor
+        }}
+        transition={{
+          duration: 0.8,
+          ease: [0.4, 0, 0.2, 1],
+        }}
       />
     </svg>
   );
