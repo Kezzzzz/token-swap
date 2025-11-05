@@ -45,7 +45,7 @@ export default function TokenListItem({
 
       {/* Token Info */}
       <div className="flex-1 min-w-0">
-        <div className="mb-0.5 flex items-center gap-1.5">
+        <div className="mb-0.5 flex items-center gap-1.5 flex-wrap">
           <span className="font-semibold text-white text-sm">
             {token.symbol}
           </span>
