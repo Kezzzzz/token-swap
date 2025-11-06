@@ -32,7 +32,7 @@ export default function TokenListItem({
       ref={itemRef}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      className={`group flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${
+      className={`group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors md:px-3 md:py-2.5 active:bg-white/10 ${
         isSelected
           ? "bg-white/10 border-l-2 border-white"
           : isHighlighted
@@ -46,7 +46,7 @@ export default function TokenListItem({
       {/* Token Info - Minimal */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <span className="font-medium text-white text-sm">
+          <span className="font-medium text-white text-sm md:text-sm">
             {token.symbol}
           </span>
           <span className="text-[10px] text-gray-500">

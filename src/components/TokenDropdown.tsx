@@ -6,6 +6,7 @@ import { useSparklineData } from "@/hooks/useSparklineData";
 import TokenListItem from "./TokenListItem";
 import Sparkline from "./Sparkline";
 import TokenAvatar from "./TokenAvatar";
+import FullScreenModal from "./FullScreenModal";
 
 interface TokenDropdownProps {
   selectedToken: Token | null;
@@ -24,10 +25,24 @@ export default function TokenDropdown({
   const [searchQuery, setSearchQuery] = useState("");
   const [openUpward, setOpenUpward] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const listItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // 768px is Tailwind's md breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Fetch sparkline data for selected token
   const { data: selectedSparkline } = useSparklineData({
@@ -61,8 +76,10 @@ export default function TokenDropdown({
       return 0;
     });
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside (desktop only)
   useEffect(() => {
+    if (isMobile) return; // Don't need this for mobile since we use BottomSheet
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -75,13 +92,13 @@ export default function TokenDropdown({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isMobile]);
 
   // Focus search input and detect dropdown direction when dropdown opens
   useEffect(() => {
     if (isOpen) {
-      // Detect available space and determine dropdown direction
-      if (triggerRef.current) {
+      // Detect available space and determine dropdown direction (desktop only)
+      if (!isMobile && triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
         const spaceBelow = window.innerHeight - rect.bottom;
         const spaceAbove = rect.top;
@@ -107,16 +124,26 @@ export default function TokenDropdown({
       }
 
       // Focus search input
-      if (searchInputRef.current) {
-        searchInputRef.current.focus();
-      }
+      setTimeout(() => {
+        if (isMobile && mobileSearchInputRef.current) {
+          mobileSearchInputRef.current.focus();
+        } else if (!isMobile && searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+      }, 100);
     }
     // Only run when isOpen changes, not when selectedToken or availableTokens change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
   const handleSelect = (token: Token) => {
     onSelect(token);
+    setIsOpen(false);
+    setSearchQuery("");
+    setHighlightedIndex(0);
+  };
+
+  const handleClose = () => {
     setIsOpen(false);
     setSearchQuery("");
     setHighlightedIndex(0);
@@ -166,6 +193,38 @@ export default function TokenDropdown({
       });
     }
   }, [highlightedIndex, isOpen]);
+
+  // Render token list items
+  const renderTokenList = (isMobileView = false) => (
+    <div className={isMobileView ? "" : "max-h-72 overflow-y-auto"}>
+      {filteredTokens.length > 0 ? (
+        filteredTokens.map((token, index) => {
+          const isSelected =
+            selectedToken?.symbol === token.symbol &&
+            selectedToken?.chainId === token.chainId;
+          const isHighlighted = index === highlightedIndex;
+
+          return (
+            <TokenListItem
+              key={`${token.symbol}-${token.chainId}`}
+              token={token}
+              isSelected={isSelected}
+              isHighlighted={isHighlighted}
+              onClick={() => handleSelect(token)}
+              onMouseEnter={() => setHighlightedIndex(index)}
+              itemRef={(el) => {
+                listItemRefs.current[index] = el;
+              }}
+            />
+          );
+        })
+      ) : (
+        <div className="px-3 py-6 text-center text-sm text-gray-500">
+          No tokens found
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="relative">
@@ -244,8 +303,8 @@ export default function TokenDropdown({
           </div>
         </button>
 
-        {/* Dropdown Menu - Absolutely positioned, doesn't affect parent height */}
-        {isOpen && (
+        {/* Desktop Dropdown Menu - Absolutely positioned, doesn't affect parent height */}
+        {isOpen && !isMobile && (
           <div
             className={`absolute left-0 right-0 z-[100] overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl shadow-black/50 ${
               openUpward ? "bottom-full mb-2" : "top-full mt-2"
@@ -280,36 +339,47 @@ export default function TokenDropdown({
             </div>
 
             {/* Token List */}
-            <div className="max-h-72 overflow-y-auto">
-              {filteredTokens.length > 0 ? (
-                filteredTokens.map((token, index) => {
-                  const isSelected =
-                    selectedToken?.symbol === token.symbol &&
-                    selectedToken?.chainId === token.chainId;
-                  const isHighlighted = index === highlightedIndex;
-
-                  return (
-                    <TokenListItem
-                      key={`${token.symbol}-${token.chainId}`}
-                      token={token}
-                      isSelected={isSelected}
-                      isHighlighted={isHighlighted}
-                      onClick={() => handleSelect(token)}
-                      onMouseEnter={() => setHighlightedIndex(index)}
-                      itemRef={(el) => {
-                        listItemRefs.current[index] = el;
-                      }}
-                    />
-                  );
-                })
-              ) : (
-                <div className="px-3 py-6 text-center text-sm text-gray-500">
-                  No tokens found
-                </div>
-              )}
-            </div>
+            {renderTokenList(false)}
           </div>
         )}
+
+        {/* Mobile Full Screen Modal */}
+        <FullScreenModal
+          isOpen={isOpen && isMobile}
+          onClose={handleClose}
+          title="Select Token"
+        >
+          {/* Search Input */}
+          <div className="sticky top-0 z-10 border-b border-white/10 bg-black p-4">
+            <div className="relative">
+              <svg
+                className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                ref={mobileSearchInputRef}
+                type="text"
+                placeholder="Search tokens..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pl-11 pr-4 text-base text-white placeholder-gray-500 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10"
+              />
+            </div>
+          </div>
+
+          {/* Token List */}
+          {renderTokenList(true)}
+        </FullScreenModal>
       </div>
     </div>
   );

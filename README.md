@@ -229,6 +229,28 @@ This section documents the key product and UX decisions made during development,
 - "Popular" badges for most-used tokens
 - Mouse + keyboard hybrid navigation
 
+### Why Full-Screen Modal on Mobile?
+
+**Decision:** Use a full-screen modal on mobile devices instead of a dropdown
+
+**Reasoning:**
+
+- **Better touch targets** - Mobile list items have larger padding (16px vs 12px) for easier tapping
+- **More browsing space** - Users can see more tokens at once without cramped dropdown constraints
+- **Native app feel** - Full-screen modals match iOS/Android patterns users are familiar with
+- **Portal rendering** - Modal renders at document.body level, escaping any parent container overflow restrictions
+
+**Implementation:**
+
+- React portal to `document.body` ensures true full-screen coverage
+- Desktop (≥768px): Traditional dropdown with smart positioning
+- Mobile (<768px): Animated full-screen modal with backdrop
+- Sticky search bar stays at top while scrolling token list
+- Same keyboard navigation works on both desktop and mobile
+- Smooth fade-in animation (200ms) feels polished and responsive
+
+**Result:** Desktop users get familiar dropdown UX, mobile users get an optimized full-screen experience without compromise.
+
 ### Why Sparklines in Selected Token View?
 
 **Decision:** Show sparkline in the dropdown trigger (selected token), not in the dropdown list
