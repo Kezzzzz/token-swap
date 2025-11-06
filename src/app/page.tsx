@@ -11,7 +11,11 @@ export default function Home() {
       </main>
 
       {/* Subtle attribution */}
-      <div className="fixed bottom-4 right-4 text-xs text-gray-700 opacity-50 hover:opacity-100 transition-opacity duration-200">
+      <div 
+        className="fixed bottom-4 right-4 text-xs text-gray-700 opacity-50 hover:opacity-100 focus-within:opacity-100 transition-opacity duration-200"
+        role="contentinfo"
+        aria-label="Powered by Funkit API"
+      >
         Powered by <span className="text-white">Funkit API</span>
       </div>
     </div>

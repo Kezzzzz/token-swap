@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 interface FullScreenModalProps {
   isOpen: boolean;
@@ -17,6 +17,7 @@ export default function FullScreenModal({
   children,
   title,
 }: FullScreenModalProps) {
+  const shouldReduceMotion = useReducedMotion();
   const sheetRef = useRef<HTMLDivElement>(null);
 
   // Prevent body scroll when modal is open
@@ -31,6 +32,18 @@ export default function FullScreenModal({
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  // Handle escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
 
   // Handle backdrop click
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -48,10 +61,10 @@ export default function FullScreenModal({
         <div className="fixed inset-0 z-9999 md:hidden">
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: shouldReduceMotion ? 1 : 0 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.2 }}
             onClick={handleBackdropClick}
             className="absolute inset-0 bg-black/95 backdrop-blur-sm"
           />
@@ -59,10 +72,13 @@ export default function FullScreenModal({
           {/* Full Screen Modal */}
           <motion.div
             ref={sheetRef}
-            initial={{ opacity: 0, scale: 0.95 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            initial={{ opacity: shouldReduceMotion ? 1 : 0, scale: shouldReduceMotion ? 1 : 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{
+            exit={{ opacity: shouldReduceMotion ? 1 : 0, scale: shouldReduceMotion ? 1 : 0.95 }}
+            transition={shouldReduceMotion ? { duration: 0 } : {
               duration: 0.2,
               ease: "easeOut",
             }}
@@ -74,8 +90,8 @@ export default function FullScreenModal({
                 <h2 className="text-xl font-semibold text-white">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="rounded-full p-2 transition-colors hover:bg-white/10 active:bg-white/20"
-                  aria-label="Close"
+                  className="rounded-full p-2 transition-colors hover:bg-white/10 active:bg-white/20 focus-visible:ring-2 focus-visible:ring-white/40"
+                  aria-label="Close modal"
                 >
                   <svg
                     className="h-6 w-6 text-gray-400"

@@ -241,7 +241,10 @@ export default function TokenDropdown({
           ref={triggerRef}
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="group relative w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-left transition-all duration-200 hover:border-white/20 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10"
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-label={selectedToken ? `Selected token: ${selectedToken.symbol}` : "Select a token"}
+          className="group relative w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-left transition-all duration-200 hover:border-white/20 hover:bg-white/10 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10 active:bg-white/[0.15]"
         >
           <div className="flex items-center justify-between gap-3">
             {selectedToken ? (
@@ -306,6 +309,8 @@ export default function TokenDropdown({
         {/* Desktop Dropdown Menu - Absolutely positioned, doesn't affect parent height */}
         {isOpen && !isMobile && (
           <div
+            role="listbox"
+            aria-label="Token selection list"
             className={`absolute left-0 right-0 z-[100] overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl shadow-black/50 ${
               openUpward ? "bottom-full mb-2" : "top-full mt-2"
             }`}
@@ -333,7 +338,8 @@ export default function TokenDropdown({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white placeholder-gray-600 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10"
+                  aria-label="Search for tokens"
+                  className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white placeholder-gray-600 transition-all focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10 hover:bg-white/10"
                 />
               </div>
             </div>
@@ -372,7 +378,8 @@ export default function TokenDropdown({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pl-11 pr-4 text-base text-white placeholder-gray-500 focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10"
+                aria-label="Search for tokens"
+                className="w-full rounded-xl border border-white/10 bg-white/5 py-3.5 pl-11 pr-4 text-base text-white placeholder-gray-500 transition-all focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/10 hover:bg-white/10"
               />
             </div>
           </div>

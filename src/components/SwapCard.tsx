@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Token } from "@/lib/constants/tokens";
 import { useTokenPrice } from "@/hooks/useTokenPrice";
 import TokenDropdown from "./TokenDropdown";
 
 export default function SwapCard() {
+  const shouldReduceMotion = useReducedMotion();
   const [sourceToken, setSourceToken] = useState<Token | null>(null);
   const [targetToken, setTargetToken] = useState<Token | null>(null);
   const [usdAmount, setUsdAmount] = useState<string>("100");
@@ -87,10 +88,10 @@ export default function SwapCard() {
           <div className="relative z-10 rounded-3xl bg-[#0a0a0a] p-4 shadow-2xl shadow-black/50 backdrop-blur-xl">
             <div className="rounded-2xl border border-white/10 bg-black p-4">
               {/* Source Section - You Pay */}
-              <div className="space-y-2">
-                <label className="px-2 text-xs font-medium uppercase tracking-wider text-gray-400">
+              <div className="space-y-2" role="group" aria-labelledby="source-section-label">
+                <div id="source-section-label" className="px-2 text-xs font-medium uppercase tracking-wider text-gray-400">
                   You pay
-                </label>
+                </div>
 
                 <div className="mb-3">
                   <TokenDropdown
@@ -105,14 +106,18 @@ export default function SwapCard() {
                   <>
                     {/* Input Field with Visual Clarity */}
                     <div className="relative mb-3 rounded-xl border-2 border-white/10 bg-white/5 p-4 transition-all focus-within:border-white/30 focus-within:ring-2 focus-within:ring-white/10">
-                      <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-gray-600">
-                        Amount
+                      <label 
+                        htmlFor="swap-amount-input" 
+                        className="mb-1 block text-xs font-medium uppercase tracking-wider text-gray-600"
+                      >
+                        Amount in USD
                       </label>
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl font-semibold text-gray-400">
+                        <span className="text-2xl font-semibold text-gray-400" aria-hidden="true">
                           $
                         </span>
                         <input
+                          id="swap-amount-input"
                           ref={amountInputRef}
                           type="number"
                           min="0"
@@ -120,6 +125,7 @@ export default function SwapCard() {
                           value={usdAmount}
                           onChange={(e) => setUsdAmount(e.target.value)}
                           placeholder="0.00"
+                          aria-label="Swap amount in USD"
                           className="w-full border-0 bg-transparent p-0 text-4xl font-bold text-white placeholder-gray-600 focus:outline-none focus:ring-0"
                         />
                       </div>
@@ -127,7 +133,7 @@ export default function SwapCard() {
 
                     {/* Token Amount Display */}
                     {sourceLoading ? (
-                      <div className="space-y-2">
+                      <div className="space-y-2" aria-label="Loading source token price">
                         <div className="h-5 w-32 animate-pulse rounded bg-gray-700"></div>
                         <div className="h-4 w-24 animate-pulse rounded bg-gray-700/50"></div>
                       </div>
@@ -135,10 +141,12 @@ export default function SwapCard() {
                       <AnimatePresence mode="wait">
                         <motion.div
                           key={`source-${sourceToken.symbol}-${sourceToken.chainId}`}
-                          initial={{ opacity: 0 }}
+                          initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
                           animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
+                          exit={{ opacity: shouldReduceMotion ? 1 : 0 }}
+                          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.2 }}
+                          aria-live="polite"
+                          aria-atomic="true"
                         >
                           <div className="text-sm font-medium text-gray-300">
                             ≈{" "}
@@ -174,11 +182,11 @@ export default function SwapCard() {
                   <motion.button
                     onClick={handleSwap}
                     disabled={!sourceToken || !targetToken}
-                    className="rounded-full border border-white/10 bg-[#0a0a0a] p-2 transition-colors duration-200 hover:enabled:bg-[#1a1a1a] hover:enabled:border-white/20 disabled:cursor-not-allowed disabled:bg-[#0a0a0a]"
-                    aria-label="Swap tokens"
-                    whileTap={sourceToken && targetToken ? { scale: 0.9 } : {}}
-                    animate={{ rotate: swapKey * 180 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="rounded-full border border-white/10 bg-[#0a0a0a] p-2 transition-colors duration-200 hover:enabled:bg-[#1a1a1a] hover:enabled:border-white/20 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] disabled:cursor-not-allowed disabled:bg-[#0a0a0a] disabled:opacity-50"
+                    aria-label="Swap source and target tokens"
+                    whileTap={sourceToken && targetToken && !shouldReduceMotion ? { scale: 0.9 } : {}}
+                    animate={{ rotate: shouldReduceMotion ? 0 : swapKey * 180 }}
+                    transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3, ease: "easeInOut" }}
                   >
                     <svg
                       className="h-4 w-4 text-gray-400"
@@ -198,10 +206,10 @@ export default function SwapCard() {
               </div>
 
               {/* Target Section - You Receive */}
-              <div className="space-y-2">
-                <label className="px-2 text-xs font-medium uppercase tracking-wider text-gray-400">
+              <div className="space-y-2" role="group" aria-labelledby="target-section-label">
+                <div id="target-section-label" className="px-2 text-xs font-medium uppercase tracking-wider text-gray-400">
                   You receive
-                </label>
+                </div>
 
                 <div className="mb-3">
                   <TokenDropdown
@@ -215,7 +223,7 @@ export default function SwapCard() {
                 {targetToken ? (
                   <>
                     {targetLoading ? (
-                      <div className="space-y-2">
+                      <div className="space-y-2" aria-label="Loading target token price">
                         <div className="h-[44px] w-3/4 animate-pulse rounded bg-gray-700 mb-2"></div>
                         <div className="h-5 w-32 animate-pulse rounded bg-gray-700/50"></div>
                         <div className="h-4 w-24 animate-pulse rounded bg-gray-700/50"></div>
@@ -224,10 +232,12 @@ export default function SwapCard() {
                       <AnimatePresence mode="wait">
                         <motion.div
                           key={`target-${targetToken.symbol}-${targetToken.chainId}`}
-                          initial={{ opacity: 0 }}
+                          initial={{ opacity: shouldReduceMotion ? 1 : 0 }}
                           animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
+                          exit={{ opacity: shouldReduceMotion ? 1 : 0 }}
+                          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.2 }}
+                          aria-live="polite"
+                          aria-atomic="true"
                         >
                           <div className="mb-2 text-4xl font-bold text-white">
                             {targetTokenAmount > 0

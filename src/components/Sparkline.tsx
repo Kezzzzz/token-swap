@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 interface SparklineProps {
   data: number[];
@@ -17,6 +17,7 @@ export default function Sparkline({
   className = "",
   isPositive = true,
 }: SparklineProps) {
+  const shouldReduceMotion = useReducedMotion();
   if (!data || data.length < 2) {
     return null;
   }
@@ -81,13 +82,13 @@ export default function Sparkline({
             offset="0%" 
             stopOpacity="0.3"
             animate={{ stopColor: gradientColor }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, ease: "easeInOut" }}
           />
           <motion.stop 
             offset="100%" 
             stopOpacity="0"
             animate={{ stopColor: gradientColor }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, ease: "easeInOut" }}
           />
         </linearGradient>
       </defs>
@@ -97,7 +98,7 @@ export default function Sparkline({
         d={areaPath}
         fill={`url(#gradient-${uniqueId})`}
         animate={{ d: areaPath }}
-        transition={{
+        transition={shouldReduceMotion ? { duration: 0 } : {
           duration: 0.8,
           ease: [0.4, 0, 0.2, 1],
         }}
@@ -114,7 +115,7 @@ export default function Sparkline({
           points: points,
           stroke: strokeColor
         }}
-        transition={{
+        transition={shouldReduceMotion ? { duration: 0 } : {
           duration: 0.8,
           ease: [0.4, 0, 0.2, 1],
         }}

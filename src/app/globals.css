@@ -60,3 +60,31 @@ input[type="number"] {
 *::-webkit-scrollbar-thumb:active {
   background: rgba(255, 255, 255, 0.35);
 }
+
+/* Accessibility: Focus visible styles */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+/* Only apply focus rings to inputs/textareas/selects that don't have explicit focus:outline-none */
+/* This allows components with focus-within containers to skip the inner ring */
+input:focus-visible:not([class*="focus:outline-none"]),
+textarea:focus-visible:not([class*="focus:outline-none"]),
+select:focus-visible:not([class*="focus:outline-none"]) {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 1px;
+}
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -32,7 +32,10 @@ export default function TokenListItem({
       ref={itemRef}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      className={`group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors md:px-3 md:py-2.5 active:bg-white/10 ${
+      role="option"
+      aria-selected={isSelected}
+      aria-label={`${token.symbol} on ${CHAIN_NAMES[token.chainId]}`}
+      className={`group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors md:px-3 md:py-2.5 active:bg-white/10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/40 ${
         isSelected
           ? "bg-white/10 border-l-2 border-white"
           : isHighlighted
